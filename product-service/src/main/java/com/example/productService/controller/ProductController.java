@@ -3,6 +3,7 @@ package com.example.productService.controller;
 import com.example.productService.dto.ProductDTO;
 import com.example.productService.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -17,9 +18,17 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private Flux<ProductDTO> flux;
+
     @GetMapping("all")
     public Flux<ProductDTO> getAllProducts(){
         return this.productService.getAll();
+    }
+
+    @GetMapping(value = "stream",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ProductDTO> getProductsStream(){
+        return this.flux;
     }
 
     @GetMapping("{id}")
